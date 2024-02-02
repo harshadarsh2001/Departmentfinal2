@@ -44,7 +44,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    @CachePut(value = "departments", key = "#id")
+    @CacheEvict(value = "departments", allEntries = true)
+//    @CachePut(value = "departments", key = "#id")
     public Optional<DepartmentDTO> updateDepartmentDTO(Long id, DepartmentDTO updatedDepartmentDTO) {
         return departmentRepository.findById(id)
                 .map(existingDepartment -> {
