@@ -1,5 +1,7 @@
 package com.harshproject.service;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -9,7 +11,6 @@ import com.harshproject.entity.Department;
 import com.harshproject.repository.Repository;
 
 @Service
-@Cacheable(value = "departments")
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final Repository departmentRepository;
@@ -19,6 +20,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Cacheable(value = "departments")
     public List<DepartmentDTO> getAllDepartmentDTOs() {
         return departmentRepository.findAll()
                 .stream()
@@ -27,13 +29,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    
+    @Cacheable(value = "departments")
     public Optional<DepartmentDTO> getDepartmentDTOById(Long id) {
         return departmentRepository.findById(id)
                 .map(this::convertToDTO);
     }
-
     @Override
+    @CacheEvict(value = "departments", allEntries = true)
     public DepartmentDTO saveDepartmentDTO(DepartmentDTO departmentDTO) {
         Department department = convertToEntity(departmentDTO);
         Department savedDepartment = departmentRepository.save(department);
@@ -42,6 +44,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @CachePut(value = "departments", key = "#id")
     public Optional<DepartmentDTO> updateDepartmentDTO(Long id, DepartmentDTO updatedDepartmentDTO) {
         return departmentRepository.findById(id)
                 .map(existingDepartment -> {
