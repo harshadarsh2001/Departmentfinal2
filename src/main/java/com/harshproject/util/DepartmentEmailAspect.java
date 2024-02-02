@@ -1,6 +1,7 @@
 package com.harshproject.util;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.MailSender;
 import org.springframework.stereotype.Component;
+
+import com.harshproject.exception.DepartmentNotFoundException;
 
 @Aspect
 @Component
@@ -45,6 +48,18 @@ public class DepartmentEmailAspect {
     public void sendEmailForTask3() {
         sendEmail(FAKE_EMAIL, "Scheduled Task Confirmation 3",
                 "The scheduled task has been executed successfully: Task Executed Every 1 hour");
+    }
+    
+    @AfterThrowing(pointcut = "execution(* com.harshproject.controller.DepartmentController.*(..))", throwing = "ex")
+    public void handleException(JoinPoint joinPoint, DepartmentNotFoundException ex) {
+        String methodName = "";
+        if (joinPoint.getSignature() != null) {
+            methodName = joinPoint.getSignature().getName();
+        }
+        logger.error("Exception occurred in method: {}", methodName, ex);
+
+        // Customize the email subject and message for the exception
+        sendErrorEmail(methodName, "Exception occurred: " + ex.getMessage());
     }
 
     @SuppressWarnings("deprecation")
