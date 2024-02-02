@@ -1,7 +1,10 @@
 package com.harshproject.exception;
-public class DepartmentNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatusCode;
 
-    public DepartmentNotFoundException(String message) {
+public class DepartmentNotFoundException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
+
+	public DepartmentNotFoundException(HttpStatusCode notImplemented, String message) {
         super(message);
     }
 }
