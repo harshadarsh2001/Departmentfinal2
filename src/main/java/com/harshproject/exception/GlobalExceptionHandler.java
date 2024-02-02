@@ -1,36 +1,34 @@
 package com.harshproject.exception;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import com.harshproject.util.DepartmentEmailAspect;
-
-import jakarta.servlet.http.HttpServletRequest;
-
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
-    
-    private final DepartmentEmailAspect departmentEmailAspect;
 
-    public GlobalExceptionHandler(DepartmentEmailAspect departmentEmailAspect) {
-        this.departmentEmailAspect = departmentEmailAspect;
+    @ExceptionHandler(DepartmentNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    public ResponseEntity<Object> handleDepartmentNotFoundException(DepartmentNotFoundException ex) {
+        // Log the exception
+        ex.printStackTrace();
+
+        HttpStatus status = HttpStatus.NOT_IMPLEMENTED;
+        ApiError apiError = new ApiError(status, ex.getMessage(), LocalDateTime.now());
+        return new ResponseEntity<>(apiError, status);
     }
 
-    @ExceptionHandler({ DepartmentNotFoundException.class, Exception.class })
-    public ResponseEntity<Object> handleException(
-            Exception ex, HttpServletRequest request) {
-        // Send an email using DepartmentEmailAspect
-        departmentEmailAspect.sendErrorEmail("GlobalExceptionHandler", ex.getMessage());
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<Object> handleGenericException(Exception ex) {
+        // Log the exception
+        ex.printStackTrace();
 
-        // Create a custom error response
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        ApiError apiError = new ApiError(status, "Interval Server Error", LocalDateTime.now(), null);
-        apiError.addError("error", ex.getMessage()); // Add the specific error message
-
+        ApiError apiError = new ApiError(status, "An unexpected error occurred", LocalDateTime.now());
         return new ResponseEntity<>(apiError, status);
     }
 }
+
