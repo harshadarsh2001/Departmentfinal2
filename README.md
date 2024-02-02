@@ -11,7 +11,7 @@ This Spring Boot project is designed for managing department data through RESTfu
   - `filter`: Custom filters for request processing.
   - `service`: Business logic and services.
   - `config`: Configuration classes for various components.
-  - `rabbitmq`: Messaging Support.
+  - `listener`: Messaging Support.
 - `src/test/java`: Unit and integration tests.
 
 ## Prerequisites
@@ -106,7 +106,7 @@ Aspect-Oriented Programming is used to send email notifications based on method 
 
 ### Utilizing Spring Profiles
 
-Spring profiles are used for managing different environments. The application is configured with profiles such as `dev`, `test`, `rabbitmq` and `prod`. Adjust the `application.properties` file accordingly.
+Spring profiles are used for managing different environments. The application is configured with profiles such as `dev`, `test`, `rabbitmq`, and `prod`. Adjust the `application.properties` file accordingly.
 
 ### RabbitMQ Integration
 
