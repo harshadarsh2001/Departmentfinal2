@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DepartmentSpringboot</a> &gt; <a href="index.source.html" class="el_package">com.harshproject.exception</a> &gt; <span class="el_source">GlobalExceptionHandler.java</span></div><h1>GlobalExceptionHandler.java</h1><pre class="source lang-java linenums">package com.harshproject.exception;
+
+import java.time.LocalDateTime;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.harshproject.util.DepartmentEmailAspect;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+    
+    private final DepartmentEmailAspect departmentEmailAspect;
+
+<span class="fc" id="L19">    public GlobalExceptionHandler(DepartmentEmailAspect departmentEmailAspect) {</span>
+<span class="fc" id="L20">        this.departmentEmailAspect = departmentEmailAspect;</span>
+<span class="fc" id="L21">    }</span>
+
+    @ExceptionHandler({ DepartmentNotFoundException.class, Exception.class })
+    public ResponseEntity&lt;Object&gt; handleException(
+            Exception ex, HttpServletRequest request) {
+        // Send an email using DepartmentEmailAspect
+<span class="fc" id="L27">        departmentEmailAspect.sendErrorEmail(&quot;GlobalExceptionHandler&quot;, ex.getMessage());</span>
+
+        // Create a custom error response
+<span class="fc" id="L30">        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;</span>
+<span class="fc" id="L31">        ApiError apiError = new ApiError(status, &quot;Interval Server Error&quot;, LocalDateTime.now(), null);</span>
+<span class="nc" id="L32">        apiError.addError(&quot;error&quot;, ex.getMessage()); // Add the specific error message</span>
+
+<span class="nc" id="L34">        return new ResponseEntity&lt;&gt;(apiError, status);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

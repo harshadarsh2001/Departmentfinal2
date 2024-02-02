@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DepartmentEmailAspect.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">DepartmentSpringboot</a> &gt; <a href="index.source.html" class="el_package">com.harshproject.util</a> &gt; <span class="el_source">DepartmentEmailAspect.java</span></div><h1>DepartmentEmailAspect.java</h1><pre class="source lang-java linenums">package com.harshproject.util;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.MailSender;
+import org.springframework.stereotype.Component;
+
+@Aspect
+@Component
+public class DepartmentEmailAspect {
+
+	private final MailSender mailSender;
+<span class="fc" id="L18">    public DepartmentEmailAspect(MailSender mailSender) {</span>
+<span class="fc" id="L19">        this.mailSender = mailSender;</span>
+<span class="fc" id="L20">    }</span>
+<span class="fc" id="L21">    private static final Logger logger = LoggerFactory.getLogger(DepartmentEmailAspect.class);</span>
+
+    // Define a constant for the email address
+    private static final String FAKE_EMAIL = &quot;fake-email@example.com&quot;;
+
+    @Before(&quot;execution(* com.harshproject.scheduler.SchedulerComponent.sendScheduledTaskConfirmationEmailEvery10sec())&quot;)
+    public void sendEmailForTask0() {
+<span class="fc" id="L28">        sendEmail(FAKE_EMAIL, &quot;Scheduled Task Confirmation 0&quot;,</span>
+                &quot;The scheduled task has been executed successfully: Task Executed Every 10 sec&quot;);
+<span class="fc" id="L30">    }</span>
+
+    @Before(&quot;execution(* com.harshproject.scheduler.SchedulerComponent.sendScheduledTaskConfirmationEmailEvery5Seconds())&quot;)
+    public void sendEmailForTask1() {
+<span class="fc" id="L34">        sendEmail(FAKE_EMAIL, &quot;Scheduled Task Confirmation 1&quot;,</span>
+                &quot;The scheduled task has been executed successfully: Task Executed Every 5 min&quot;);
+<span class="fc" id="L36">    }</span>
+
+    @Before(&quot;execution(* com.harshproject.scheduler.SchedulerComponent.sendScheduledTaskConfirmationEmailEvery30Minutes())&quot;)
+    public void sendEmailForTask2() {
+<span class="fc" id="L40">        sendEmail(FAKE_EMAIL, &quot;Scheduled Task Confirmation 2&quot;,</span>
+                &quot;The scheduled task has been executed successfully: Task Executed Every 30 Minutes&quot;);
+<span class="fc" id="L42">    }</span>
+
+    @Before(&quot;execution(* com.harshproject.scheduler.SchedulerComponent.sendScheduledTaskConfirmationEmailEvery1hr())&quot;)
+    public void sendEmailForTask3() {
+<span class="fc" id="L46">        sendEmail(FAKE_EMAIL, &quot;Scheduled Task Confirmation 3&quot;,</span>
+                &quot;The scheduled task has been executed successfully: Task Executed Every 1 hour&quot;);
+<span class="fc" id="L48">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;)
+    @AfterReturning(pointcut = &quot;execution(* com.harshproject.controller.DepartmentController.*(..))&quot;, returning = &quot;result&quot;)
+    public void handleHttpCodes(JoinPoint joinPoint, Object result) {
+<span class="fc" id="L53">        String methodName = &quot;&quot;;</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (joinPoint.getSignature() != null) {</span>
+<span class="nc" id="L55">            methodName = joinPoint.getSignature().getName();</span>
+        }
+<span class="fc" id="L57">        logger.info(&quot;Handling HTTP codes for method: {}&quot;, methodName);</span>
+
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (result instanceof ResponseEntity) {</span>
+<span class="fc" id="L60">            int statusCodeValue = ((ResponseEntity&lt;?&gt;) result).getStatusCodeValue();</span>
+
+            // Add your custom logic based on HTTP status codes
+<span class="pc bpc" id="L63" title="5 of 6 branches missed.">            switch (statusCodeValue) {</span>
+                case 403:
+<span class="nc" id="L65">                    logger.info(&quot;HTTP 403 Not Found&quot;);</span>
+<span class="nc" id="L66">                    sendErrorEmail(methodName, &quot;HTTP 403 Not Found&quot;);</span>
+<span class="nc" id="L67">                    break;</span>
+                case 204:
+<span class="nc" id="L69">                    logger.info(&quot;HTTP 204 OK&quot;);</span>
+<span class="nc" id="L70">                    sendConfirmationEmail(methodName, &quot;HTTP 204 OK&quot;);</span>
+<span class="nc" id="L71">                    break;</span>
+
+                case 200:
+<span class="fc" id="L74">                    logger.info(&quot;HTTP 200 OK&quot;);</span>
+<span class="fc" id="L75">                    sendConfirmationEmail(methodName, &quot;HTTP 200 OK&quot;);</span>
+<span class="fc" id="L76">                    break;</span>
+                case 201:
+<span class="nc" id="L78">                    logger.info(&quot;HTTP 201 Created&quot;);</span>
+<span class="nc" id="L79">                    sendConfirmationEmail(methodName, &quot;HTTP 201 Created&quot;);</span>
+<span class="nc" id="L80">                    break;</span>
+                case 404:
+<span class="nc" id="L82">                    logger.info(&quot;HTTP 404 Not Found&quot;);</span>
+<span class="nc" id="L83">                    sendErrorEmail(methodName, &quot;HTTP 404 Not Found&quot;);</span>
+<span class="nc" id="L84">                    break;</span>
+
+                default:
+<span class="nc" id="L87">                    logger.info(&quot;Unhandled HTTP status code: {}&quot;, statusCodeValue);</span>
+<span class="nc" id="L88">                    sendErrorEmail(methodName, &quot;Unhandled HTTP status code: &quot; + statusCodeValue);</span>
+            }
+<span class="fc" id="L90">        } else {</span>
+<span class="nc" id="L91">            logger.warn(&quot;Unexpected result type: {}&quot;, result.getClass().getName());</span>
+<span class="nc" id="L92">            sendErrorEmail(methodName, &quot;Unexpected result type: &quot; + result.getClass().getName());</span>
+        }
+<span class="fc" id="L94">    }</span>
+
+    private void sendEmail(String to, String subject, String text) {
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (mailSender != null) {</span>
+<span class="fc" id="L98">            SimpleMailMessage message = new SimpleMailMessage();</span>
+<span class="fc" id="L99">            message.setTo(to);</span>
+<span class="fc" id="L100">            message.setSubject(subject);</span>
+<span class="fc" id="L101">            message.setText(text);</span>
+<span class="fc" id="L102">            mailSender.send(message);</span>
+<span class="fc" id="L103">        } else {</span>
+<span class="fc" id="L104">            logger.error(&quot;MailSender is null. Email not sent.&quot;);</span>
+        }
+<span class="fc" id="L106">    }</span>
+
+    public void sendConfirmationEmail(String methodName, String message) {
+<span class="fc" id="L109">        sendEmail(FAKE_EMAIL, &quot;Method Execution Confirmation - &quot; + methodName, message);</span>
+<span class="fc" id="L110">    }</span>
+
+    public void sendErrorEmail(String methodName, String errorMessage) {
+<span class="fc" id="L113">        sendEmail(FAKE_EMAIL, &quot;Error in Method Execution - &quot; + methodName, errorMessage);</span>
+<span class="fc" id="L114">    }</span>
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
