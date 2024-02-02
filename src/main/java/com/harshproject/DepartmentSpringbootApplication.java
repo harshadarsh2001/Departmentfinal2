@@ -6,18 +6,14 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
-
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-
 import org.springdoc.core.customizers.OpenApiCustomizer;
 
 @SpringBootApplication
 @EnableScheduling
 @EnableRabbit
 @EnableCaching
-@EnableSpringHttpSession
 public class DepartmentSpringbootApplication {
 
     public static void main(String[] args) {
