@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
@@ -70,13 +69,10 @@ public class DepartmentController {
             Optional<DepartmentDTO> departmentDTOOptional = departmentService.getDepartmentDTOById(id);
             return departmentDTOOptional.map(departmentDTO -> new ResponseEntity<>(departmentDTO, HttpStatus.OK))
                     .orElseThrow(() -> {
-                        departmentEmailAspect.sendErrorEmail("getDepartmentById",DEPARTMENT_NOT_FOUND_MESSAGE + id);
-                        return new DepartmentNotFoundException(DEPARTMENT_NOT_FOUND_MESSAGE + id);
+                        // Customize the status code and message for DepartmentNotFoundException
+                        throw new DepartmentNotFoundException(HttpStatus.NOT_IMPLEMENTED, DEPARTMENT_NOT_FOUND_MESSAGE + id);
                     });
         } catch (DepartmentNotFoundException ex) {
-            // Use your DepartmentEmailAspect to send an email
-            departmentEmailAspect.sendErrorEmail("getDepartmentById",DEPARTMENT_NOT_FOUND_MESSAGE + id);
-
             // Re-throw the exception to be handled globally
             throw ex;
         }
@@ -97,17 +93,15 @@ public class DepartmentController {
             Optional<DepartmentDTO> updated = departmentService.updateDepartmentDTO(id, updatedDepartmentDTO);
             return updated.map(updatedDTO -> new ResponseEntity<>(updatedDTO, HttpStatus.OK))
                     .orElseThrow(() -> {
-                        departmentEmailAspect.sendErrorEmail("updateDepartment", DEPARTMENT_NOT_FOUND_MESSAGE + id);
-                        return new DepartmentNotFoundException(DEPARTMENT_NOT_FOUND_MESSAGE+ id);
+                        // Customize the status code and message for DepartmentNotFoundException
+                        throw new DepartmentNotFoundException(HttpStatus.NOT_IMPLEMENTED, DEPARTMENT_NOT_FOUND_MESSAGE + id);
                     });
         } catch (DepartmentNotFoundException ex) {
-            // Use your DepartmentEmailAspect to send an email
-            departmentEmailAspect.sendErrorEmail("updateDepartment",DEPARTMENT_NOT_FOUND_MESSAGE + id);
-
             // Re-throw the exception to be handled globally
             throw ex;
         }
     }
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
