@@ -128,11 +128,13 @@ docker build -t my-spring-boot-app .
 
 -Running the Docker container
 To run the Docker container for the Spring Boot application, execute the following command in your terminal:
--docker run --name department -d my-spring-boot-app
+
+docker run --name department -d my-spring-boot-app
 
 -Running with Docker Compose
 Alternatively, you can use Docker Compose to simplify the process. Ensure you have a docker-compose.yml file configured properly. Then, run:
--docker-compose up -d
+
+docker-compose up -d
 
 
 ## Testing
