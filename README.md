@@ -25,6 +25,8 @@ Ensure you have the following installed before working with the project:
 - MySQL Workbench
 - Postman
 - FakeSMTP Server
+- Docker: [Installation instructions](https://docs.docker.com/get-docker/)
+- Docker Compose: [Installation instructions](https://docs.docker.com/compose/install/)
 
 ## Getting Started
 
@@ -82,9 +84,29 @@ RabbitMQ integration is included for asynchronous message processing.
 - **RabbitMQ Configuration:** Check `RabbitMQConfig` class.
 - **Sending Messages:** Implemented in `DepartmentController` for save and update operations.
 
-## API Endpoints
+## Docker
 
-### Departments
+### Building the Docker image
+
+To build the Docker image for the Spring Boot application, navigate to the root directory of the project and run the following command:
+
+```bash
+docker build -t my-spring-boot-app .
+## Running the Docker container
+
+To run the Docker container for the Spring Boot application, execute the following command in your terminal:
+
+```bash
+docker run --name department -d my-spring-boot-app
+## Running with Docker Compose
+
+Alternatively, you can use Docker Compose to simplify the process. Ensure you have a `docker-compose.yml` file configured properly. Then, run:
+
+```bash
+docker-compose up -d
+# API Endpoints
+
+## Departments
 
 - **GET /department:** Get all departments.
 - **GET /department/{id}:** Get a department by ID.
@@ -92,23 +114,23 @@ RabbitMQ integration is included for asynchronous message processing.
 - **PUT /department/{id}:** Update a department by ID.
 - **DELETE /department/{id}:** Delete a department by ID.
 
-### Email Notifications
+## Email Notifications
 
 The project includes scheduled tasks that send email notifications for various activities. Email notifications are sent for tasks executed every 10 seconds, 5 minutes, 30 minutes, and 1 hour.
 
-### Custom Health Indicator
+## Custom Health Indicator
 
 A custom health indicator is implemented to check the health of the database connection. It provides insights into the status of the database and is accessible at `/actuator/health`.
 
-### Aspect-Oriented Programming (AOP) for Email Notifications
+## Aspect-Oriented Programming (AOP) for Email Notifications
 
 Aspect-Oriented Programming is used to send email notifications based on method execution. Emails are sent for successful and error scenarios, providing insights into the execution flow.
 
-### Utilizing Spring Profiles
+## Utilizing Spring Profiles
 
 Spring profiles are used for managing different environments. The application is configured with profiles such as `dev`, `test`, `rabbitmq`, and `prod`. Adjust the `application.properties` file accordingly.
 
-### RabbitMQ Integration
+## RabbitMQ Integration
 
 - **POST /department/rabbitmq/save:** Save a new department with RabbitMQ.
 - **PUT /department/{id}/rabbitmq/update:** Update a department by ID with RabbitMQ.
@@ -119,7 +141,7 @@ Spring profiles are used for managing different environments. The application is
 
 ## Testing
 
-Unit and integration tests are available in the `src/test` directory. Run tests using:
+Unit and integration tests are available in the `src/test` directory. Run tests using: 
 
 ```bash
 mvn test
