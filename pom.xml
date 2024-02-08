@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
-			<scope>runtime</scope>
+			<scope>runtime</scope> 
 		</dependency>
 
 		<dependency>
@@ -104,24 +104,24 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 	    <dependency>
-	          <groupId>org.springframework.boot</groupId>
-	          <artifactId>spring-boot-starter-amqp</artifactId>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-starter-data-redis</artifactId>
-	    </dependency>
-	    <dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-databind</artifactId>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.ben-manes.caffeine</groupId>
-		    <artifactId>caffeine</artifactId>
+		    <groupId>org.springframework.amqp</groupId>
+		    <artifactId>spring-rabbit</artifactId>
+		</dependency>
+	    <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>org.springframework.session</groupId>
-		    <artifactId>spring-session-core</artifactId>
+		    <groupId>org.springframework.data</groupId>
+		    <artifactId>spring-data-redis</artifactId>
+		</dependency>
+	    <dependency>
+		    <groupId>redis.clients</groupId>
+		    <artifactId>jedis</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
@@ -150,14 +150,47 @@
 	            </executions>
 	        </plugin>
 	        <plugin>
-	            <groupId>org.sonarsource.scanner.maven</groupId>
-	            <artifactId>sonar-maven-plugin</artifactId>
-	        </plugin>
+			    <groupId>org.sonarsource.scanner.maven</groupId>
+			    <artifactId>sonar-maven-plugin</artifactId>
+			    <version>3.10.0.2594</version> <!-- Specify the version here -->
+			</plugin>
+
 	        <plugin>
 	            <groupId>org.apache.maven.plugins</groupId>
 	            <artifactId>maven-surefire-plugin</artifactId>
 	        </plugin>
-		</plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+            <!--<plugin>
+                <groupId>org.jfrog.buildinfo</groupId>
+			    <artifactId>artifactory-maven-plugin</artifactId>
+			    <version>4.28.1</version>
+			    <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>artifactory-integration</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>publish</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <artifactory>
+                        <url>https://springbootappdepartment.jfrog.io/</url>
+                        <username>harshadarsh2001@gmail.com</username>
+                        <password>Iamthebest*2001</password>
+                    </artifactory>
+                </configuration>
+            </plugin> -->
+        </plugins>
+		<finalName>department-spring-boot-docker</finalName>
 	</build>
 
 </project>
