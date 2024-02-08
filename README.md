@@ -123,24 +123,21 @@ Spring profiles are used for managing different environments. The application is
 
 ### Building the Docker image
 
-To build the Docker image for the Spring Boot application, navigate to the root directory of the project and run the following command:
-
-```bash
+-To build the Docker image for the Spring Boot application, navigate to the root directory of the project and run the following command:
 docker build -t my-spring-boot-app .
 
-Running the Docker container
+-Running the Docker container
 To run the Docker container for the Spring Boot application, execute the following command in your terminal:
+-docker run --name department -d my-spring-boot-app
 
-docker run --name department -d my-spring-boot-app
-
-Running with Docker Compose
+-Running with Docker Compose
 Alternatively, you can use Docker Compose to simplify the process. Ensure you have a docker-compose.yml file configured properly. Then, run:
+-docker-compose up -d
 
-docker-compose up -d
 
 ## Testing
 
-Unit and integration tests are available in the `src/test` directory. Run tests using:
+### Unit and integration tests are available in the `src/test` directory. Run tests using:
 
 ```bash
 mvn test
