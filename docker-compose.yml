@@ -1,0 +1,56 @@
+#Docker-compose.yml
+version: '3'
+services:
+  app:
+    image: my-spring-boot-app
+    ports:
+      - "9090:8080"
+    depends_on:
+      - database
+      - rabbitmq
+      - redis
+      - fakesmtp
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/usersdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Iamthebest*2001
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_OPEN_IN_VIEW: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_SHOW_SQL: true
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      RABBITMQ_QUEUE_NAME: department-queue
+      RABBITMQ_QUEUE_DURABLE: true
+      RABBITMQ_EXCHANGE_NAME: department-exchange
+      RABBITMQ_BINDING_ROUTING_KEY: myRoutingKey
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
+
+  database:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: Iamthebest*2001
+      MYSQL_DATABASE: usersdb
+    ports:
+      - "3307:3306"
+  rabbitmq:
+    image: rabbitmq:management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+    
+  fakesmtp:
+    image: djfarrelly/maildev
+    ports:
+      - "25:25"
+    environment:
+      - EMAIL_STORAGE=/var/mail
