@@ -1,8 +1,14 @@
 replicaCount: 1
 
 image:
-  repository: my-spring-boot-app
+  repository: harshadarsh2001/my-spring-boot-app
+  pullPolicy: IfNotPresent
   tag: latest
+
+mySpringBootApplication:
+  image:
+    repository: harshadarsh2001/my-spring-boot-app
+    tag: latest
 
 service:
   type: ClusterIP
@@ -23,6 +29,18 @@ rabbitmq:
     name: department-exchange
   binding:
     routingKey: myRoutingKey
+
 mysql:
   rootPassword: Iamthebest*2001
   database: usersdb
+
+ingress:
+  enabled: false
+  annotations: 
+    # Add your desired annotations here
+  hosts:
+    - host: my-app.example.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
