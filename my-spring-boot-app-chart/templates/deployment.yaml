@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-spring-boot-app
+  labels:
+    app: my-spring-boot-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-spring-boot-app
+  template:
+    metadata:
+      labels:
+        app: my-spring-boot-app
+    spec:
+      serviceAccountName: my-service-account  # Reference to the ServiceAccount
+      containers:
+        - name: my-spring-boot-app
+          image: harshadarsh2001/my-spring-boot2
+          ports:
+            - containerPort: 8080
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: my-spring-boot-app
+                labels:
+                  app: my-spring-boot-app
+              spec:
+                replicas: 1
+                selector:
+                  matchLabels:
+                    app: my-spring-boot-app
+                template:
+                  metadata:
+                    labels:
+                      app: my-spring-boot-app
+                  spec:
+                    serviceAccountName: my-service-account  # Reference to the ServiceAccount
+                    containers:
+                      - name: my-spring-boot-app
+                        image: harshadarsh2001/my-spring-boot2
+                        ports:
+                          - containerPort: 8080

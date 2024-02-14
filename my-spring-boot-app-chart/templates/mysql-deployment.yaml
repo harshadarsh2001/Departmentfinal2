@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:latest
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "Iamthebest*2001"  # Set your MySQL root password here
+            - name: MYSQL_DATABASE
+              value: "usersdb"   # Set your MySQL database name here
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://mysql:3306/usersdb"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "root"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "Iamthebest*2001"
+          ports:
+            - containerPort: 3306
