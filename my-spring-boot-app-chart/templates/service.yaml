@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-spring-boot-app
+  labels:
+    app: my-spring-boot-app
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30000  # Choose an available port in the range 30000-32767
+  selector:
+    app: my-spring-boot-app
+    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fakesmtp
+  labels:
+    app: fakesmtp
+spec:
+  ports:
+    - port: 25  # Port that the service will listen on
+      targetPort: 25  # Port that the container listens on
+  selector:
+    app: fakesmtp
+    
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+    
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+spec:
+  ports:
+    - name: amqp
+      port: 5672
+      targetPort: 5672
+    - name: management
+      port: 15672
+      targetPort: 15672
+  selector:
+    app: rabbitmq
+    
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app: redis
+spec:
+  ports:
+    - port: 6379
+  selector:
+    app: redis

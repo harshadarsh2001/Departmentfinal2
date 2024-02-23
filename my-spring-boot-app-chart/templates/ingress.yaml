@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+spec:
+  rules:
+  - host: my-app.example.com  # Your domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-spring-boot-app
+            port:
+              number: 8080
+      - path: /fakesmtp
+        pathType: Prefix
+        backend:
+          service:
+            name: fakesmtp
+            port:
+              number: 25
+      - path: /mysql
+        pathType: Prefix
+        backend:
+          service:
+            name: mysql
+            port:
+              number: 3306
+      - path: /rabbitmq
+        pathType: Prefix
+        backend:
+          service:
+            name: rabbitmq
+            port:
+              number: 5672
+      - path: /redis
+        pathType: Prefix
+        backend:
+          service:
+            name: redis
+            port:
+              number: 6379
