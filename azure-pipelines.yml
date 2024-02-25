@@ -1,10 +1,15 @@
 # Docker
 jobs:
-- job: Build
+- job: 
   displayName: Build
   pool:
     vmImage: 'ubuntu-latest'
   steps:
+  - task: CopyFiles@2
+    inputs:
+      Contents: 'aks-deploy-from-acr.yaml'
+      TargetFolder: '$(build.artifactstagingdirectory)'
+
   - task: Maven@4
     inputs:
       mavenPomFile: 'pom.xml'
